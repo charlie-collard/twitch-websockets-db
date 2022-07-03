@@ -150,28 +150,33 @@ def handle_message(message, cursor):
     message = json.loads(message)
     if message["type"] == "MESSAGE":
         topic, data = message["data"]["topic"], json.loads(message["data"]["message"])
-        if topic == PREDICTIONS_TOPIC:
+        if "predictions-channel-v1" in topic:
             insert_prediction_message(cursor, data)
-        if topic == GAME_CHANGE_TOPIC:
+        if "broadcast-settings-update" in topic:
             insert_broadcast_settings_message(cursor, data)
 
 
-listen = {
-  "type": "LISTEN",
-  "data": {
-    "topics": [
-      PREDICTIONS_TOPIC,
-      GAME_CHANGE_TOPIC
-    ],
-    "auth_token": fetch_access_token()
-  }
-}
+
+def make_listen_message(channel_ids):
+    topics = []
+    for channel_id in channel_ids:
+        topics.append(f"predictions-channel-v1.{channel_id}")
+        topics.append(f"broadcast-settings-update.{channel_id}")
+
+    return {
+      "type": "LISTEN",
+      "data": {
+        "topics": topics,
+        "auth_token": fetch_access_token()
+      }
+    }
 
 
 async def run(cursor):
     async for websocket in websockets.connect("wss://pubsub-edge.twitch.tv/v1"):
         try:
             spawn_ping_task(websocket)
+            listen = make_listen_message([NL_ID, GBP_ID])
             print(json.dumps(listen))
             await websocket.send(json.dumps(listen))
             while True:
