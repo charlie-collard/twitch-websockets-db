@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import datetime
 
 {
   "channel_id": "31758516",
@@ -17,6 +18,7 @@ TABLES = [
     """
     create table if not exists broadcast_settings_messages (
         id integer primary key autoincrement,
+        utcTimestamp datetime not null,
         channelTwitchID text not null,
         channelName text not null,
         oldStatus text not null,
@@ -30,7 +32,7 @@ TABLES = [
     """
     create table if not exists prediction_messages (
         id integer primary key autoincrement,
-        timestamp datetime not null,
+        utcTimestamp datetime not null,
         channelTwitchID text not null,
 
         eventTwitchID text not null,
@@ -125,7 +127,45 @@ TABLES = [
     """
 ]
 
+def insert_broadcast_settings_message(cursor, data):
+    to_insert = {
+        "channelTwitchID": data["channel_id"],
+        "utcTimestamp": datetime.utcnow(),
+        "channelName": data["channel"],
+        "oldStatus": data["old_status"],
+        "status": data["status"],
+        "oldGame": data["old_game"],
+        "game": data["game"],
+        "oldGameTwitchID": str(data["old_game_id"]),
+        "gameTwitchID": str(data["game_id"]),
+    }
 
-with sqlite3.connect("websockets.db") as connection:
+    cursor.execute("""
+    insert into broadcast_settings_messages (
+        channelTwitchID,
+        utcTimestamp,
+        channelName,
+        oldStatus,
+        status,
+        oldGame,
+        game,
+        oldGameTwitchID,
+        gameTwitchID
+    ) values (
+        :channelTwitchID,
+        :utcTimestamp,
+        :channelName,
+        :oldStatus,
+        :status,
+        :oldGame,
+        :game,
+        :oldGameTwitchID,
+        :gameTwitchID
+    )
+    """, to_insert)
+    cursor.execute("commit;")
+
+
+def create_tables(cursor):
     for create_table in TABLES:
-        connection.execute(create_table)
+        cursor.execute(create_table)

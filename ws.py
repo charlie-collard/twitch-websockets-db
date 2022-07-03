@@ -3,13 +3,17 @@ import asyncio
 import json
 import requests
 import os
+import sqlite3
 
+from db import create_tables, insert_broadcast_settings_message
+
+KING20333_ID = "31758516"
 GBP_ID = "53831996"
 
-PREDICTIONS_TOPIC = f"predictions-channel-v1.{GBP_ID}"
-GAME_CHANGE_TOPIC = f"broadcast-settings-update.{GBP_ID}"
+PREDICTIONS_TOPIC = f"predictions-channel-v1.{KING20333_ID}"
+GAME_CHANGE_TOPIC = f"broadcast-settings-update.{KING20333_ID}"
 
-{
+test_broadcast_settings_message = {
   "channel_id": "31758516",
   "type": "broadcast_settings_update",
   "channel": "king20333",
@@ -52,20 +56,15 @@ def handle_prediction_message(data):
     pass
 
 
-def handle_game_change_message(data):
-    print("Received game change message")
-    pass
-
-
-def handle_message(message):
+def handle_message(message, cursor):
     print(message)
     message = json.loads(message)
     if message["type"] == "MESSAGE":
-        topic, data = message["data"]["topic"], message["data"]["message"]
+        topic, data = message["data"]["topic"], json.loads(message["data"]["message"])
         if topic == PREDICTIONS_TOPIC:
             handle_prediction_message(data)
         if topic == GAME_CHANGE_TOPIC:
-            handle_game_change_message(data)
+            insert_broadcast_settings_message(cursor, data)
 
 
 listen = {
@@ -80,15 +79,18 @@ listen = {
 }
 
 
-async def test():
+async def run(cursor):
     async for websocket in websockets.connect("wss://pubsub-edge.twitch.tv/v1"):
         try:
             spawn_ping_task(websocket)
             print(json.dumps(listen))
             await websocket.send(json.dumps(listen))
             while True:
-                handle_message(await websocket.recv())
+                handle_message(await websocket.recv(), cursor)
         except websockets.ConnectionClosed:
             continue
 
-asyncio.run(test())
+with sqlite3.connect("websockets.db") as connection:
+    cursor = connection.cursor()
+    create_tables(cursor)
+    asyncio.run(run(cursor))
