@@ -1,4 +1,4 @@
-credentials.fish
+credentials.*
 websockets.db
 
 __pycache__/
