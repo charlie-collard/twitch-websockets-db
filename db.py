@@ -168,7 +168,7 @@ def insert_prediction_message(cursor, data):
         outcome = event_data["outcomes"][i] if len(event_data["outcomes"]) > i else None
         to_insert |= {
             f"outcome{i}TwitchID": outcome["id"],
-            f"outcome{i}Title": outcome["id"],
+            f"outcome{i}Title": outcome["title"],
             f"outcome{i}Color": outcome["color"],
             f"outcome{i}TotalPoints": outcome["total_points"],
             f"outcome{i}TotalUsers": outcome["total_users"],
