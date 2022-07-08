@@ -29,10 +29,10 @@ out["title"] = resolved_bets["eventTitle"]
 out["window_seconds"] = resolved_bets["eventPredictionWindowSeconds"]
 out["win_index"] = resolved_bets.apply(get_winning_outcome_index, axis=1)
 for i in range(10):
-    out[f"title_{i}"] = resolved_bets[f"outcome{i}Title"]
-    out[f"points_{i}"] = resolved_bets[f"outcome{i}TotalPoints"]
-    out[f"users_{i}"] = resolved_bets[f"outcome{i}TotalUsers"]
+    out[f"title_{i+1}"] = resolved_bets[f"outcome{i}Title"]
+    out[f"points_{i+1}"] = resolved_bets[f"outcome{i}TotalPoints"]
+    out[f"users_{i+1}"] = resolved_bets[f"outcome{i}TotalUsers"]
 
-out = pd.concat([out, pd.read_csv("NorthernLion Predictions - predictions.csv")])
+out = pd.concat([pd.read_csv("NorthernLion Predictions - predictions.csv"), out])
 out = out[out["game_name"] == "Fall Guys"]
 print(out.win_index.value_counts(normalize=True))
