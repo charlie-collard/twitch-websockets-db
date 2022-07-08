@@ -13,6 +13,7 @@ HIKARU_ID = "103268673"
 CR1T_ID = "132230344"
 BAHROO_ID = "40972890"
 NL_ID = "14371185"
+DAN_ID = "30923466"
 
 LISTEN_ID = NL_ID
 
@@ -176,7 +177,7 @@ async def run(cursor):
     async for websocket in websockets.connect("wss://pubsub-edge.twitch.tv/v1"):
         try:
             spawn_ping_task(websocket)
-            listen = make_listen_message([NL_ID, GBP_ID])
+            listen = make_listen_message([NL_ID, GBP_ID, BAHROO_ID, DAN_ID])
             print(json.dumps(listen))
             await websocket.send(json.dumps(listen))
             while True:
