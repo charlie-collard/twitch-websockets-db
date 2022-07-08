@@ -4,6 +4,7 @@ import json
 import requests
 import os
 import sqlite3
+import pandas as pd
 
 from db import create_tables, insert_broadcast_settings_message, insert_prediction_message
 
@@ -146,15 +147,35 @@ def spawn_ping_task(websocket):
     ping_task.add_done_callback(background_tasks.discard)
 
 
+def handle_prediction_message(data):
+    if data['status'] in ['ACTIVE', 'LOCKED']:
+        odds = pd.Series([
+            0.047904,
+            0.071856,
+            0.083832,
+            0.107784,
+            0.089820,
+            0.119760,
+            0.083832,
+            0.119760,
+            0.077844,
+            0.197605,
+        ])
+        # Try to predict last-minute betting + and my bet
+        extra = 20000 if data['status'] == 'ACTIVE' else 0
+        points = pd.Series(list(map(lambda x: x['total_points'] + extra, data['outcomes'])))
+        payouts = 1/(points / points.sum())
+        payouts.index = ['0-1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+        odds.index = ['0-1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+        print((odds * payouts).sort_values(ascending=False))
+
+
 def handle_message(message, cursor):
-    print(message)
     message = json.loads(message)
     if message["type"] == "MESSAGE":
         topic, data = message["data"]["topic"], json.loads(message["data"]["message"])
         if "predictions-channel-v1" in topic:
-            insert_prediction_message(cursor, data)
-        if "broadcast-settings-update" in topic:
-            insert_broadcast_settings_message(cursor, data)
+            handle_prediction_message(data['data']['event'])
 
 
 
@@ -174,10 +195,14 @@ def make_listen_message(channel_ids):
 
 
 async def run(cursor):
+    global background_tasks
     async for websocket in websockets.connect("wss://pubsub-edge.twitch.tv/v1"):
+        for task in background_tasks:
+            task.cancel()
+        background_tasks = set()
         try:
             spawn_ping_task(websocket)
-            listen = make_listen_message([NL_ID, GBP_ID, BAHROO_ID, DAN_ID])
+            listen = make_listen_message([NL_ID])
             print(json.dumps(listen))
             await websocket.send(json.dumps(listen))
             while True:
@@ -185,8 +210,4 @@ async def run(cursor):
         except websockets.ConnectionClosed:
             continue
 
-with sqlite3.connect("websockets.db") as connection:
-    cursor = connection.cursor()
-    create_tables(cursor)
-
-    asyncio.run(run(cursor))
+asyncio.run(run(None))
