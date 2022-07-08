@@ -3,6 +3,8 @@ import sqlite3
 import csv
 
 channel_id = "14371185"
+game_name = "Fall Guys"
+event_title = ""
 
 with sqlite3.connect('websockets.db') as connection:
     cursor = connection.cursor()
@@ -34,5 +36,6 @@ for i in range(10):
     out[f"users_{i+1}"] = resolved_bets[f"outcome{i}TotalUsers"]
 
 out = pd.concat([pd.read_csv("NorthernLion Predictions - predictions.csv"), out])
-out = out[out["game_name"] == "Fall Guys"]
+out = out[out["game_name"] == game_name] if game_name else out
+out = out[out["title"].str.contains(event_title)] if event_title else out
 print(out.win_index.value_counts(normalize=True))
