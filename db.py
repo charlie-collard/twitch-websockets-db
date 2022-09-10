@@ -2,9 +2,9 @@ import sqlite3
 import asyncio
 from datetime import datetime
 
-from ws import twitch_websocket_runner, NL_ID, GBP_ID, BAHROO_ID, DAN_ID
+from ws import twitch_websocket_runner, NL_ID, GBP_ID, BAHROO_ID, DAN_ID, DENDI_ID
 
-CHANNELS = [NL_ID, GBP_ID, BAHROO_ID, DAN_ID]
+CHANNELS = [NL_ID, GBP_ID, BAHROO_ID, DAN_ID, DENDI_ID]
 TOPICS = ["predictions-channel-v1", "broadcast-settings-update"]
 
 TABLES = [

@@ -12,6 +12,7 @@ CR1T_ID = "132230344"
 BAHROO_ID = "40972890"
 NL_ID = "14371185"
 DAN_ID = "30923466"
+DENDI_ID = "39176440"
 
 test_broadcast_settings_message = {
   "channel_id": "31758516",
