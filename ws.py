@@ -162,7 +162,7 @@ async def twitch_websocket_runner(channels, topics, message_handler):
             while True:
                 message = json.loads(await websocket.recv())
                 if message["type"] == "MESSAGE":
-                    topic, data = message["data"]["topic"], json.loads(message["data"]["message"])
-                    message_handler(data["data"]["event"], topic)
+                    message, topic = json.loads(message["data"]["message"]), message["data"]["topic"],
+                    message_handler(message, topic)
         except websockets.ConnectionClosed:
             continue

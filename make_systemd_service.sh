@@ -7,7 +7,7 @@ Description="Starts up twitch websocket listener"
 [Service]
 User=charlie
 WorkingDirectory=/home/charlie/workspace/twitch-websockets-db
-ExecStart=bash -c "source credentials.sh && python3.9 ws.py"
+ExecStart=bash -c "source credentials.sh && python3.9 db.py"
 Restart=always
 StandardOutput=journal
 StandardError=journal
