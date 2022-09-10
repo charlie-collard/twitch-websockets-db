@@ -1,5 +1,11 @@
 import sqlite3
+import asyncio
 from datetime import datetime
+
+from ws import twitch_websocket_runner, NL_ID, GBP_ID, BAHROO_ID, DAN_ID
+
+CHANNELS = [NL_ID, GBP_ID, BAHROO_ID, DAN_ID]
+TOPICS = ["predictions-channel-v1", "broadcast-settings-update"]
 
 TABLES = [
     """
@@ -139,13 +145,13 @@ def get_nullable(event_data, key, post_process=lambda x: x):
     return post_process(event_data[key]) if event_data.get(key) else None
 
 
-def insert_prediction_message(cursor, data):
-    event_data = data["data"]["event"]
+def insert_prediction_message(cursor, message):
+    event_data = message["data"]["event"]
     to_insert = {
-        "utcTimestamp": to_timestamp(data["data"]["timestamp"]),
+        "utcTimestamp": to_timestamp(message["data"]["timestamp"]),
         "channelTwitchID": event_data["channel_id"],
         "eventTwitchID": event_data["id"],
-        "eventType": data["type"],
+        "eventType": message["type"],
         "eventStatus": event_data["status"],
         "eventTitle": event_data["title"],
         "eventPredictionWindowSeconds": event_data["prediction_window_seconds"],
@@ -282,17 +288,17 @@ def insert_prediction_message(cursor, data):
     , to_insert)
     cursor.execute("commit;")
 
-def insert_broadcast_settings_message(cursor, data):
+def insert_broadcast_settings_message(cursor, message):
     to_insert = {
-        "channelTwitchID": data["channel_id"],
+        "channelTwitchID": message["channel_id"],
         "utcTimestamp": datetime.utcnow(),
-        "channelName": data["channel"],
-        "oldStatus": data["old_status"],
-        "status": data["status"],
-        "oldGame": data["old_game"],
-        "game": data["game"],
-        "oldGameTwitchID": str(data["old_game_id"]),
-        "gameTwitchID": str(data["game_id"]),
+        "channelName": message["channel"],
+        "oldStatus": message["old_status"],
+        "status": message["status"],
+        "oldGame": message["old_game"],
+        "game": message["game"],
+        "oldGameTwitchID": str(message["old_game_id"]),
+        "gameTwitchID": str(message["game_id"]),
     }
 
     cursor.execute("""
@@ -315,3 +321,16 @@ def insert_broadcast_settings_message(cursor, data):
 def create_tables(cursor):
     for create_table in TABLES:
         cursor.execute(create_table)
+
+with sqlite3.connect("websockets.db") as connection:
+    cursor = connection.cursor()
+    create_tables(cursor)
+
+    def message_handler(message, topic):
+        if "predictions-channel-v1" in topic:
+            insert_prediction_message(cursor, message)
+        if "broadcast-settings-update" in topic:
+            insert_broadcast_settings_message(cursor, message)
+
+
+    asyncio.run(twitch_websocket_runner(CHANNELS, TOPICS, message_handler))
