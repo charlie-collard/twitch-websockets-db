@@ -1,12 +1,9 @@
-import websockets
 import asyncio
+import itertools
 import json
-import requests
 import os
-import sqlite3
-import pandas as pd
-
-from db import create_tables, insert_broadcast_settings_message, insert_prediction_message
+import requests
+import websockets
 
 KING20333_ID = "31758516"
 GBP_ID = "53831996"
@@ -15,11 +12,6 @@ CR1T_ID = "132230344"
 BAHROO_ID = "40972890"
 NL_ID = "14371185"
 DAN_ID = "30923466"
-
-LISTEN_ID = NL_ID
-
-PREDICTIONS_TOPIC = f"predictions-channel-v1.{LISTEN_ID}"
-GAME_CHANGE_TOPIC = f"broadcast-settings-update.{LISTEN_ID}"
 
 test_broadcast_settings_message = {
   "channel_id": "31758516",
@@ -122,16 +114,6 @@ test_predictions_message = {
 }
 
 
-def fetch_access_token():
-    params = {
-        "client_id": os.environ["client_id"],
-        "client_secret": os.environ["client_secret"],
-        "grant_type": "client_credentials",
-        "scope": "user:read:email",
-    }
-    return requests.post("https://id.twitch.tv/oauth2/token", params=params).json()["access_token"]
-
-
 background_tasks = set()
 async def ping(websocket):
     await asyncio.sleep(4 * 60)
@@ -147,54 +129,27 @@ def spawn_ping_task(websocket):
     ping_task.add_done_callback(background_tasks.discard)
 
 
-def handle_prediction_message(data):
-    if data['status'] in ['ACTIVE', 'LOCKED']:
-        odds = pd.Series([
-            0.047904,
-            0.071856,
-            0.083832,
-            0.107784,
-            0.089820,
-            0.119760,
-            0.083832,
-            0.119760,
-            0.077844,
-            0.197605,
-        ])
-        # Try to predict last-minute betting + and my bet
-        extra = 20000 if data['status'] == 'ACTIVE' else 0
-        points = pd.Series(list(map(lambda x: x['total_points'] + extra, data['outcomes'])))
-        payouts = 1/(points / points.sum())
-        payouts.index = ['0-1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
-        odds.index = ['0-1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
-        print((odds * payouts).sort_values(ascending=False))
+def fetch_access_token():
+    params = {
+        "client_id": os.environ["client_id"],
+        "client_secret": os.environ["client_secret"],
+        "grant_type": "client_credentials",
+        "scope": "user:read:email",
+    }
+    return requests.post("https://id.twitch.tv/oauth2/token", params=params).json()["access_token"]
 
 
-def handle_message(message, cursor):
-    message = json.loads(message)
-    if message["type"] == "MESSAGE":
-        topic, data = message["data"]["topic"], json.loads(message["data"]["message"])
-        if "predictions-channel-v1" in topic:
-            handle_prediction_message(data['data']['event'])
-
-
-
-def make_listen_message(channel_ids):
-    topics = []
-    for channel_id in channel_ids:
-        topics.append(f"predictions-channel-v1.{channel_id}")
-        topics.append(f"broadcast-settings-update.{channel_id}")
-
-    return {
+def make_listen_message(channels, topics):
+    return json.dumps({
       "type": "LISTEN",
       "data": {
-        "topics": topics,
+        "topics": [f"{topic}.{channel}" for channel, topic in itertools.product(channels, topics)],
         "auth_token": fetch_access_token()
       }
-    }
+    })
 
 
-async def run(cursor):
+async def twitch_websocket_runner(channels, topics, message_handler):
     global background_tasks
     async for websocket in websockets.connect("wss://pubsub-edge.twitch.tv/v1"):
         for task in background_tasks:
@@ -202,12 +157,12 @@ async def run(cursor):
         background_tasks = set()
         try:
             spawn_ping_task(websocket)
-            listen = make_listen_message([NL_ID])
-            print(json.dumps(listen))
-            await websocket.send(json.dumps(listen))
+            listen_message = make_listen_message(channels, topics)
+            await websocket.send(listen_message)
             while True:
-                handle_message(await websocket.recv(), cursor)
+                message = json.loads(await websocket.recv())
+                if message["type"] == "MESSAGE":
+                    topic, data = message["data"]["topic"], json.loads(message["data"]["message"])
+                    message_handler(data["data"]["event"], topic)
         except websockets.ConnectionClosed:
             continue
-
-asyncio.run(run(None))
