@@ -39,4 +39,6 @@ out = pd.concat([pd.read_csv("NorthernLion Predictions - predictions.csv"), out]
 out = out[out["game_name"] == game_name] if game_name else out
 out = out[out["title"].str.contains(event_title)] if event_title else out
 out = out[out["created_at"] > "2022-09-01"]
+
+assert len(set(tuple(row[f"title_{j+1}"] for j in range(10)) for i, row in out.iterrows())) == 1
 print(out.win_index.value_counts(normalize=True).sort_index())
