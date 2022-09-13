@@ -118,7 +118,6 @@ test_predictions_message = {
 background_tasks = set()
 async def ping(websocket):
     await asyncio.sleep(4 * 60)
-    print(json.dumps({"type":"PING"}))
     await websocket.send(json.dumps({"type":"PING"}))
     spawn_ping_task(websocket)
 

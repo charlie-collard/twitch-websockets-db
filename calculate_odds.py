@@ -1,6 +1,24 @@
+from datetime import datetime, timedelta
 import pandas as pd
 import sqlite3
 import csv
+
+KNOWN_SYNONYMS = [
+    # Super Auto Pets
+    set([
+        "How many wins will we get?",
+        "How many wins will NL get?",
+        "How many wins will get get?",
+        "How many wins will we get this time?",
+        "How many wins will NL get this time?",
+        "How many wins will we get on this run?",
+        ]),
+    # Games + Demos (Zombs)
+    set([
+        "Where will NL finish?",
+        "Where will we finish?",
+        ])
+]
 
 
 def load_resolved_bets(channel_id):
@@ -30,7 +48,14 @@ def get_winning_outcome_index(resolved_bets):
     return lambda row: 1 + int(id_columns[row[id_columns] == row["eventWinningOutcomeTwitchId"]].str.extract("outcome(\d+)TwitchID")[0][0])
 
 
-def calculate_odds(channel_id, game_name, event_title, outcome_titles):
+def get_synonyms(event_title):
+    for synonyms in KNOWN_SYNONYMS:
+        if event_title in synonyms:
+            return synonyms
+    return set([event_title])
+
+
+def calculate_history(channel_id):
     resolved_bets, games = load_resolved_bets(channel_id), load_game_history(channel_id)
 
     out = pd.DataFrame()
@@ -45,12 +70,30 @@ def calculate_odds(channel_id, game_name, event_title, outcome_titles):
         out[f"users_{i+1}"] = resolved_bets[f"outcome{i}TotalUsers"]
 
     out = pd.concat([pd.read_csv("NorthernLion Predictions - predictions.csv"), out])
+    return out
+
+
+def calculate_odds(channel_id, game_name, event_title, outcome_titles):
+    out = calculate_history(channel_id)
+
+    synonyms = get_synonyms(event_title)
     out = out[out["game_name"] == game_name]
-    out = out[out["title"] == event_title]
-    for i in range(10):
-        outcome_title = outcome_titles[i]
+    out = out[out["title"].isin(synonyms)]
+    out = out[out["created_at"].astype('datetime64') > (datetime.now() - timedelta(days=30))]
+
+    # Only select historical bets which have the same outcomes
+    assert len(outcome_titles) == 10
+    for i, outcome_title in enumerate(outcome_titles):
         out = out[out[f"title_{i+1}"] == outcome_title] if outcome_title is not None else out[out[f"title_{i+1}"].isnull()]
 
-    odds = out.win_index.value_counts(normalize=True).sort_index()
-    odds.index = [title for title in outcome_titles if title is not None]
+    odds = out['win_index'].value_counts(normalize=True)
+
+    non_null_outcomes = [title for title in outcome_titles if title is not None]
+    # Fill in any outcomes which have never happened
+    for i in range(len(non_null_outcomes)):
+        if not odds.get(i+1):
+            odds[i+1] = 0
+
+    odds = odds.sort_index()
+    odds.index = non_null_outcomes
     return len(out), odds
