@@ -55,6 +55,12 @@ def get_synonyms(event_title):
     return set([event_title])
 
 
+def normalize_outcome_title(outcome_title):
+    return outcome_title.lower() \
+        .replace("of the", "of") \
+        .replace("-", " to ")
+
+
 def calculate_history(channel_id):
     resolved_bets, games = load_resolved_bets(channel_id), load_game_history(channel_id)
 
@@ -84,7 +90,7 @@ def calculate_odds(channel_id, game_name, event_title, outcome_titles):
     # Only select historical bets which have the same outcomes
     assert len(outcome_titles) == 10
     for i, outcome_title in enumerate(outcome_titles):
-        out = out[out[f"title_{i+1}"] == outcome_title] if outcome_title is not None else out[out[f"title_{i+1}"].isnull()]
+        out = out[out[f"title_{i+1}"].apply(normalize_outcome_title) == normalize_outcome_title(outcome_title)] if outcome_title is not None else out[out[f"title_{i+1}"].isnull()]
 
     odds = out['win_index'].value_counts(normalize=True)
 
