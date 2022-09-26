@@ -4,8 +4,19 @@ from datetime import datetime
 
 from ws import twitch_websocket_runner, NL_ID, GBP_ID, BAHROO_ID, DAN_ID, DENDI_ID
 
-CHANNELS = [NL_ID, GBP_ID, BAHROO_ID, DAN_ID, DENDI_ID]
-TOPICS = ["predictions-channel-v1", "broadcast-settings-update"]
+CHANNELS = [
+    NL_ID,
+    GBP_ID,
+    BAHROO_ID,
+    DAN_ID,
+    DENDI_ID,
+]
+
+TOPICS = [
+    "predictions-channel-v1",       # Channel points
+    "broadcast-settings-update",    # Current game and stream title
+    "video-playback-by-id",         # Current viewer count
+]
 
 TABLES = [
     """
@@ -127,7 +138,15 @@ TABLES = [
         outcome9BadgeVersion text,
         outcome9BadgeSetTwitchID text
     );
+    """,
     """
+    create table if not exists viewercount_messages (
+        id integer primary key autoincrement,
+        utcTimestamp datetime not null,
+        channelTwitchID text not null,
+        viewers integer not null
+    );
+    """,
 ]
 
 def to_timestamp(timestamp):
@@ -318,6 +337,24 @@ def insert_broadcast_settings_message(cursor, message):
     cursor.execute("commit;")
 
 
+def insert_viewercount_message(cursor, message, channel_id):
+    to_insert = {
+        "utcTimestamp": datetime.utcnow(),
+        "channelTwitchID": channel_id,
+        "viewers": int(message["viewers"])
+    }
+
+    cursor.execute("""
+    insert into viewercount_messages (
+        utcTimestamp,
+        channelTwitchID,
+        viewers
+    ) values (
+    """ + ",\n".join(f":{key}" for key, value in to_insert.items()) + ");"
+    , to_insert)
+    cursor.execute("commit;")
+
+
 def create_tables(cursor):
     for create_table in TABLES:
         cursor.execute(create_table)
@@ -331,6 +368,9 @@ with sqlite3.connect("websockets.db") as connection:
             insert_prediction_message(cursor, message)
         if "broadcast-settings-update" in topic:
             insert_broadcast_settings_message(cursor, message)
+        if "video-playback-by-id" in topic:
+            channel_id = topic.split(".")[1]
+            insert_viewercount_message(cursor, message, channel_id)
 
 
     asyncio.run(twitch_websocket_runner(CHANNELS, TOPICS, message_handler))
