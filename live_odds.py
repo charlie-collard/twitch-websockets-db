@@ -29,7 +29,7 @@ def message_handler(message, topic):
 
         if odds is not None:
             # Try to predict last-second betting + my bet
-            extra = 30000 if event_data['status'] == 'ACTIVE' else 0
+            extra = 50000 if event_data['status'] == 'ACTIVE' else 0
             points = pd.Series(map(lambda x: int(x['total_points']) + extra, event_data['outcomes']))
             payouts = points.sum() / points
             outcomes = event_data["outcomes"]
