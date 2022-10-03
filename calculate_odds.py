@@ -79,20 +79,25 @@ def calculate_history(channel_id):
     return out
 
 
-def calculate_odds(channel_id, game_name, event_title, outcome_titles):
-    out = calculate_history(channel_id)
+def history_for_prediction(channel_id, game_name, event_title, outcome_titles, days=30):
+    history = calculate_history(channel_id)
 
     synonyms = get_synonyms(event_title)
-    out = out[out["game_name"] == game_name]
-    out = out[out["title"].isin(synonyms)]
-    out = out[out["created_at"].astype('datetime64') > (datetime.now() - timedelta(days=30))]
+    history = history[history["game_name"] == game_name]
+    history = history[history["title"].isin(synonyms)]
+    history = history[history["created_at"].astype('datetime64') > (datetime.now() - timedelta(days=days))]
 
     # Only select historical bets which have the same outcomes
     assert len(outcome_titles) == 10
     for i, outcome_title in enumerate(outcome_titles):
-        out = out[out[f"title_{i+1}"].apply(normalize_outcome_title) == normalize_outcome_title(outcome_title)] if outcome_title is not None else out[out[f"title_{i+1}"].isnull()]
+        history = history[history[f"title_{i+1}"].apply(normalize_outcome_title) == normalize_outcome_title(outcome_title)] if outcome_title is not None else history[history[f"title_{i+1}"].isnull()]
 
-    odds = out['win_index'].value_counts(normalize=True)
+    return history
+
+
+def calculate_odds(channel_id, game_name, event_title, outcome_titles):
+    history = history_for_prediction(channel_id, game_name, event_title, outcome_titles)
+    odds = history['win_index'].value_counts(normalize=True)
 
     non_null_outcomes = [title for title in outcome_titles if title is not None]
     # Fill in any outcomes which have never happened
@@ -102,4 +107,4 @@ def calculate_odds(channel_id, game_name, event_title, outcome_titles):
 
     odds = odds.sort_index()
     odds.index = non_null_outcomes
-    return len(out), odds
+    return len(history), odds
