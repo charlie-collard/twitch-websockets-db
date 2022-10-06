@@ -338,6 +338,9 @@ def insert_broadcast_settings_message(cursor, message):
 
 
 def insert_viewercount_message(cursor, message, channel_id):
+    if message["type"] != "viewcount":
+        return
+
     to_insert = {
         "utcTimestamp": datetime.utcnow(),
         "channelTwitchID": channel_id,
