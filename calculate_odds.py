@@ -79,7 +79,7 @@ def calculate_history(channel_id):
     return out
 
 
-def history_for_prediction(channel_id, game_name, event_title, outcome_titles, days=30):
+def history_for_prediction(channel_id, game_name, event_title, outcome_titles, days=60):
     history = calculate_history(channel_id)
 
     synonyms = get_synonyms(event_title)

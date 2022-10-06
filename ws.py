@@ -134,7 +134,6 @@ def fetch_access_token():
         "client_id": os.environ["client_id"],
         "client_secret": os.environ["client_secret"],
         "grant_type": "client_credentials",
-        "scope": "user:read:email",
     }
     return requests.post("https://id.twitch.tv/oauth2/token", params=params).json()["access_token"]
 

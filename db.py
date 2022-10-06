@@ -13,7 +13,7 @@ CHANNELS = [
 ]
 
 TOPICS = [
-    "predictions-channel-v1",       # Channel points
+    "predictions-channel-v1",       # Running predictions
     "broadcast-settings-update",    # Current game and stream title
     "video-playback-by-id",         # Current viewer count
 ]
