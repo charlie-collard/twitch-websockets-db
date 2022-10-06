@@ -2,7 +2,7 @@ import sqlite3
 import asyncio
 from datetime import datetime
 
-from ws import twitch_websocket_runner, NL_ID, GBP_ID, BAHROO_ID, DAN_ID, DENDI_ID
+from ws import twitch_websocket_runner, NL_ID, GBP_ID, BAHROO_ID, DAN_ID, DENDI_ID, KING20333_ID
 
 CHANNELS = [
     NL_ID,
@@ -16,6 +16,10 @@ TOPICS = [
     "predictions-channel-v1",       # Running predictions
     "broadcast-settings-update",    # Current game and stream title
     "video-playback-by-id",         # Current viewer count
+]
+
+EXTRA_TOPICS = [
+    f"community-points-user-v1.{KING20333_ID}" # Channel points balance updates
 ]
 
 TABLES = [
@@ -147,7 +151,20 @@ TABLES = [
         viewers integer not null
     );
     """,
+    """
+    create table if not exists channel_point_balance_messages (
+        id integer primary key autoincrement,
+        utcTimestamp datetime not null,
+        eventType text not null,
+        userTwitchID text not null,
+        channelTwitchID text not null,
+        balance integer not null,
+        reason text,
+        delta integer
+    );
+    """,
 ]
+
 
 def to_timestamp(timestamp):
     i = timestamp.find(".")
@@ -358,9 +375,47 @@ def insert_viewercount_message(cursor, message, channel_id):
     cursor.execute("commit;")
 
 
+def insert_balance_message(cursor, message):
+    event_type = message["type"]
+    if event_type not in ["points-spent", "points-earned"]:
+        return
+
+    if event_type == "points-earned":
+        reason = message["data"]["point_gain"]["reason_code"]
+        delta = message["data"]["point_gain"]["total_points"]
+    else:
+        reason = None
+        delta = None
+
+    to_insert = {
+        "utcTimestamp": to_timestamp(message["data"]["timestamp"]),
+        "eventType": event_type,
+        "userTwitchID": message["data"]["balance"]["user_id"],
+        "channelTwitchID": message["data"]["balance"]["channel_id"],
+        "balance": message["data"]["balance"]["balance"],
+        "reason": reason,
+        "delta": delta,
+    }
+
+    cursor.execute("""
+    insert into channel_point_balance_messages (
+        utcTimestamp,
+        eventType,
+        userTwitchID,
+        channelTwitchID,
+        balance,
+        reason,
+        delta
+    ) values (
+    """ + ",\n".join(f":{key}" for key, value in to_insert.items()) + ");"
+    , to_insert)
+    cursor.execute("commit;")
+
+
 def create_tables(cursor):
     for create_table in TABLES:
         cursor.execute(create_table)
+
 
 with sqlite3.connect("websockets.db") as connection:
     cursor = connection.cursor()
@@ -374,6 +429,8 @@ with sqlite3.connect("websockets.db") as connection:
         if "video-playback-by-id" in topic:
             channel_id = topic.split(".")[1]
             insert_viewercount_message(cursor, message, channel_id)
+        if "community-points-user-v1" in topic:
+            insert_balance_message(cursor, message)
 
 
-    asyncio.run(twitch_websocket_runner(CHANNELS, TOPICS, message_handler))
+    asyncio.run(twitch_websocket_runner(CHANNELS, TOPICS, message_handler, extra_topics=[]))

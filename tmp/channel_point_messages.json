@@ -1,0 +1,89 @@
+{
+  "type": "MESSAGE", "data": {
+    "topic": "community-points-user-v1.31758516",
+    "message": "{\"type\":\"points-earned\",\"data\":{\"timestamp\":\"2022-10-03T20:30:41.47722257Z\",\"channel_id\":\"14371185\",\"point_gain\":{\"user_id\":\"31758516\",\"channel_id\":\"14371185\",\"total_points\":12,\"baseline_points\":10,\"reason_code\":\"WATCH\",\"multipliers\":[{\"reason_code\":\"SUB_T1\",\"factor\":0.2}]},\"balance\":{\"user_id\":\"31758516\",\"channel_id\":\"14371185\",\"balance\":4927292}}}"
+  }
+}
+{
+  "type": "MESSAGE",
+  "data": {
+    "topic": "community-points-user-v1.31758516",
+    "message": "{\"type\":\"global-last-viewed-content-updated\",\"data\":{\"timestamp\":\"2022-10-03T20:45:57.17127413Z\",\"global_last_viewed_content\":{\"user_id\":\"31758516\",\"last_viewed_content\":[{\"content_type\":\"AUTOMATIC_REWARD\",\"content_id\":\"SINGLE_MESSAGE_BYPASS_SUB_MODE\",\"last_viewed_at\":\"2022-09-10T14:14:54.749579902Z\"},{\"content_type\":\"AUTOMATIC_REWARD\",\"content_id\":\"SEND_HIGHLIGHTED_MESSAGE\",\"last_viewed_at\":\"2022-10-01T16:15:26.3946965Z\"},{\"content_type\":\"AUTOMATIC_REWARD\",\"content_id\":\"RANDOM_SUB_EMOTE_UNLOCK\",\"last_viewed_at\":\"2022-10-03T20:45:57.163282798Z\"},{\"content_type\":\"AUTOMATIC_REWARD\",\"content_id\":\"CHOSEN_SUB_EMOTE_UNLOCK\",\"last_viewed_at\":\"2022-10-03T20:45:57.163282798Z\"},{\"content_type\":\"AUTOMATIC_REWARD\",\"content_id\":\"CHOSEN_MODIFIED_SUB_EMOTE_UNLOCK\",\"last_viewed_at\":\"2022-10-03T20:45:57.163282798Z\"}]}}}"
+  }
+}
+{
+  "type": "MESSAGE",
+  "data": {
+    "topic": "community-points-user-v1.31758516",
+    "message": "{\"type\":\"global-last-viewed-content-updated\",\"data\":{\"timestamp\":\"2022-10-03T20:45:57.17127413Z\",\"global_last_viewed_content\":{\"user_id\":\"31758516\",\"last_viewed_content\":[{\"content_type\":\"AUTOMATIC_REWARD\",\"content_id\":\"SINGLE_MESSAGE_BYPASS_SUB_MODE\",\"last_viewed_at\":\"2022-09-10T14:14:54.749579902Z\"},{\"content_type\":\"AUTOMATIC_REWARD\",\"content_id\":\"SEND_HIGHLIGHTED_MESSAGE\",\"last_viewed_at\":\"2022-10-01T16:15:26.3946965Z\"},{\"content_type\":\"AUTOMATIC_REWARD\",\"content_id\":\"RANDOM_SUB_EMOTE_UNLOCK\",\"last_viewed_at\":\"2022-10-03T20:45:57.163282798Z\"},{\"content_type\":\"AUTOMATIC_REWARD\",\"content_id\":\"CHOSEN_SUB_EMOTE_UNLOCK\",\"last_viewed_at\":\"2022-10-03T20:45:57.163282798Z\"},{\"content_type\":\"AUTOMATIC_REWARD\",\"content_id\":\"CHOSEN_MODIFIED_SUB_EMOTE_UNLOCK\",\"last_viewed_at\":\"2022-10-03T20:45:57.163282798Z\"}]}}}"
+  }
+}
+{
+  "type": "MESSAGE",
+  "data": {
+    "topic": "community-points-user-v1.31758516",
+    "message": "{\"type\":\"global-last-viewed-content-updated\",\"data\":{\"timestamp\":\"2022-10-03T20:45:57.17127413Z\",\"global_last_viewed_content\":{\"user_id\":\"31758516\",\"last_viewed_content\":[{\"content_type\":\"AUTOMATIC_REWARD\",\"content_id\":\"SINGLE_MESSAGE_BYPASS_SUB_MODE\",\"last_viewed_at\":\"2022-09-10T14:14:54.749579902Z\"},{\"content_type\":\"AUTOMATIC_REWARD\",\"content_id\":\"SEND_HIGHLIGHTED_MESSAGE\",\"last_viewed_at\":\"2022-10-01T16:15:26.3946965Z\"},{\"content_type\":\"AUTOMATIC_REWARD\",\"content_id\":\"RANDOM_SUB_EMOTE_UNLOCK\",\"last_viewed_at\":\"2022-10-03T20:45:57.163282798Z\"},{\"content_type\":\"AUTOMATIC_REWARD\",\"content_id\":\"CHOSEN_SUB_EMOTE_UNLOCK\",\"last_viewed_at\":\"2022-10-03T20:45:57.163282798Z\"},{\"content_type\":\"AUTOMATIC_REWARD\",\"content_id\":\"CHOSEN_MODIFIED_SUB_EMOTE_UNLOCK\",\"last_viewed_at\":\"2022-10-03T20:45:57.163282798Z\"}]}}}"
+  }
+}
+{
+  "type": "MESSAGE",
+  "data": {
+    "topic": "community-points-user-v1.31758516",
+    "message": "{\"type\":\"claim-available\",\"data\":{\"timestamp\":\"2022-10-03T20:51:18.078513695Z\",\"claim\":{\"id\":\"2bddc06d-5671-4647-a999-21b550c079ea\",\"user_id\":\"31758516\",\"channel_id\":\"14371185\",\"point_gain\":{\"user_id\":\"31758516\",\"channel_id\":\"14371185\",\"total_points\":60,\"baseline_points\":50,\"reason_code\":\"CLAIM\",\"multipliers\":[{\"reason_code\":\"SUB_T1\",\"factor\":0.2}]},\"created_at\":\"2022-10-03T20:51:13Z\"}}}"
+  }
+}
+{
+  "type": "MESSAGE",
+  "data": {
+    "topic": "community-points-user-v1.31758516",
+    "message": "{\"type\":\"points-spent\",\"data\":{\"timestamp\":\"2022-10-03T20:53:56.25697441Z\",\"balance\":{\"user_id\":\"31758516\",\"channel_id\":\"14371185\",\"balance\":4827400}}}"
+  }
+}
+{
+  "type": "MESSAGE",
+  "data": {
+    "topic": "community-points-user-v1.31758516",
+    "message": "{\"type\":\"points-earned\",\"data\":{\"timestamp\":\"2022-10-03T20:56:15.650482522Z\",\"channel_id\":\"14371185\",\"point_gain\":{\"user_id\":\"31758516\",\"channel_id\":\"14371185\",\"total_points\":12,\"baseline_points\":10,\"reason_code\":\"WATCH\",\"multipliers\":[{\"reason_code\":\"SUB_T1\",\"factor\":0.2}]},\"balance\":{\"user_id\":\"31758516\",\"channel_id\":\"14371185\",\"balance\":4827412}}}"
+  }
+}
+{
+  "type": "MESSAGE",
+  "data": {
+    "topic": "community-points-user-v1.31758516",
+    "message": "{\"type\":\"points-earned\",\"data\":{\"timestamp\":\"2022-10-03T20:56:57.630929022Z\",\"channel_id\":\"14371185\",\"point_gain\":{\"user_id\":\"31758516\",\"channel_id\":\"14371185\",\"total_points\":60,\"baseline_points\":50,\"reason_code\":\"CLAIM\",\"multipliers\":[{\"reason_code\":\"SUB_T1\",\"factor\":0.2}]},\"balance\":{\"user_id\":\"31758516\",\"channel_id\":\"14371185\",\"balance\":4827472}}}"
+  }
+}
+{
+  "type": "MESSAGE",
+  "data": {
+    "topic": "community-points-user-v1.31758516",
+    "message": "{\"type\":\"points-earned\",\"data\":{\"timestamp\":\"2022-10-03T20:56:57.630929022Z\",\"channel_id\":\"14371185\",\"point_gain\":{\"user_id\":\"31758516\",\"channel_id\":\"14371185\",\"total_points\":60,\"baseline_points\":50,\"reason_code\":\"CLAIM\",\"multipliers\":[{\"reason_code\":\"SUB_T1\",\"factor\":0.2}]},\"balance\":{\"user_id\":\"31758516\",\"channel_id\":\"14371185\",\"balance\":4827472}}}"
+  }
+}
+{
+  "type": "MESSAGE",
+  "data": {
+    "topic": "community-points-user-v1.31758516",
+    "message": "{\"type\":\"global-last-viewed-content-updated\",\"data\":{\"timestamp\":\"2022-10-03T21:00:02.834092736Z\",\"global_last_viewed_content\":{\"user_id\":\"31758516\",\"last_viewed_content\":[{\"content_type\":\"AUTOMATIC_REWARD\",\"content_id\":\"SINGLE_MESSAGE_BYPASS_SUB_MODE\",\"last_viewed_at\":\"2022-09-10T14:14:54.749579902Z\"},{\"content_type\":\"AUTOMATIC_REWARD\",\"content_id\":\"SEND_HIGHLIGHTED_MESSAGE\",\"last_viewed_at\":\"2022-10-01T16:15:26.3946965Z\"},{\"content_type\":\"AUTOMATIC_REWARD\",\"content_id\":\"RANDOM_SUB_EMOTE_UNLOCK\",\"last_viewed_at\":\"2022-10-03T21:00:02.826985296Z\"},{\"content_type\":\"AUTOMATIC_REWARD\",\"content_id\":\"CHOSEN_SUB_EMOTE_UNLOCK\",\"last_viewed_at\":\"2022-10-03T21:00:02.826985296Z\"},{\"content_type\":\"AUTOMATIC_REWARD\",\"content_id\":\"CHOSEN_MODIFIED_SUB_EMOTE_UNLOCK\",\"last_viewed_at\":\"2022-10-03T21:00:02.826985296Z\"}]}}}"
+  }
+}
+{
+  "type": "MESSAGE",
+  "data": {
+    "topic": "community-points-user-v1.31758516",
+    "message": "{\"type\":\"channel-last-viewed-content-updated\",\"data\":{\"timestamp\":\"2022-10-03T21:00:02.834092736Z\",\"channel_last_viewed_content\":{\"user_id\":\"31758516\",\"channel_id\":\"14371185\",\"last_viewed_content\":[{\"content_type\":\"AUTOMATIC_REWARD\",\"last_viewed_at\":\"2022-10-03T21:00:02.826985296Z\"},{\"content_type\":\"CUSTOM_REWARD\",\"last_viewed_at\":\"2022-10-03T21:00:02.826985296Z\"}]}}}"
+  }
+}
+{
+  "type": "MESSAGE",
+  "data": {
+    "topic": "community-points-user-v1.31758516",
+    "message": "{\"type\":\"channel-last-viewed-content-updated\",\"data\":{\"timestamp\":\"2022-10-03T21:00:02.834092736Z\",\"channel_last_viewed_content\":{\"user_id\":\"31758516\",\"channel_id\":\"14371185\",\"last_viewed_content\":[{\"content_type\":\"AUTOMATIC_REWARD\",\"last_viewed_at\":\"2022-10-03T21:00:02.826985296Z\"},{\"content_type\":\"CUSTOM_REWARD\",\"last_viewed_at\":\"2022-10-03T21:00:02.826985296Z\"}]}}}"
+  }
+}
+{"type":"MESSAGE","data":{"topic":"community-points-user-v1.31758516","message":"{\"type\":\"points-earned\",\"data\":{\"timestamp\":\"2022-10-03T21:01:17.225797475Z\",\"channel_id\":\"14371185\",\"point_gain\":{\"user_id\":\"31758516\",\"channel_id\":\"14371185\",\"total_points\":12,\"baseline_points\":10,\"reason_code\":\"WATCH\",\"multipliers\":[{\"reason_code\":\"SUB_T1\",\"factor\":0.2}]},\"balance\":{\"user_id\":\"31758516\",\"channel_id\":\"14371185\",\"balance\":4827484}}}"}}
+{"type":"MESSAGE","data":{"topic":"community-points-channel-v1.14371185","message":"{\"type\":\"custom-reward-updated\",\"data\":{\"timestamp\":\"2022-10-03T21:04:40.472056645Z\",\"updated_reward\":{\"id\":\"0b0e7cb2-a92d-4c72-ae03-639c3b221483\",\"channel_id\":\"14371185\",\"title\":\"Contribute to Cult's Totem\",\"prompt\":\"\",\"cost\":50000,\"is_user_input_required\":false,\"is_sub_only\":false,\"image\":null,\"default_image\":{\"url_1x\":\"https://static-cdn.jtvnw.net/custom-reward-images/default-1.png\",\"url_2x\":\"https://static-cdn.jtvnw.net/custom-reward-images/default-2.png\",\"url_4x\":\"https://static-cdn.jtvnw.net/custom-reward-images/default-4.png\"},\"background_color\":\"#D51539\",\"is_enabled\":true,\"is_paused\":false,\"is_in_stock\":false,\"max_per_stream\":{\"is_enabled\":false,\"max_per_stream\":0},\"should_redemptions_skip_request_queue\":false,\"template_id\":null,\"updated_for_indicator_at\":\"2022-08-09T16:18:54.026921684Z\",\"max_per_user_per_stream\":{\"is_enabled\":false,\"max_per_user_per_stream\":0},\"global_cooldown\":{\"is_enabled\":true,\"global_cooldown_seconds\":180},\"redemptions_redeemed_current_stream\":null,\"cooldown_expires_at\":\"2022-10-03T21:07:40Z\"}}}"}}
+{"type":"MESSAGE","data":{"topic":"community-points-channel-v1.14371185","message":"{\"type\":\"reward-redeemed\",\"data\":{\"timestamp\":\"2022-10-03T21:04:40.472056645Z\",\"redemption\":{\"id\":\"4792b6e8-8356-49b3-baa9-2c3013d93b78\",\"user\":{\"id\":\"40709999\",\"login\":\"crazyd9421\",\"display_name\":\"crazyd9421\"},\"channel_id\":\"14371185\",\"redeemed_at\":\"2022-10-03T21:04:40.472056645Z\",\"reward\":{\"id\":\"0b0e7cb2-a92d-4c72-ae03-639c3b221483\",\"channel_id\":\"14371185\",\"title\":\"Contribute to Cult's Totem\",\"prompt\":\"\",\"cost\":50000,\"is_user_input_required\":false,\"is_sub_only\":false,\"image\":null,\"default_image\":{\"url_1x\":\"https://static-cdn.jtvnw.net/custom-reward-images/default-1.png\",\"url_2x\":\"https://static-cdn.jtvnw.net/custom-reward-images/default-2.png\",\"url_4x\":\"https://static-cdn.jtvnw.net/custom-reward-images/default-4.png\"},\"background_color\":\"#D51539\",\"is_enabled\":true,\"is_paused\":false,\"is_in_stock\":false,\"max_per_stream\":{\"is_enabled\":false,\"max_per_stream\":0},\"should_redemptions_skip_request_queue\":false,\"template_id\":null,\"updated_for_indicator_at\":\"2022-08-09T16:18:54.026921684Z\",\"max_per_user_per_stream\":{\"is_enabled\":false,\"max_per_user_per_stream\":0},\"global_cooldown\":{\"is_enabled\":true,\"global_cooldown_seconds\":180},\"redemptions_redeemed_current_stream\":null,\"cooldown_expires_at\":\"2022-10-03T21:07:40Z\"},\"status\":\"UNFULFILLED\",\"cursor\":\"NDc5MmI2ZTgtODM1Ni00OWIzLWJhYTktMmMzMDEzZDkzYjc4X18yMDIyLTEwLTAzVDIxOjA0OjQwLjQ3MjA1NjY0NVo=\"}}}"}}
+{"type":"MESSAGE","data":{"topic":"community-points-user-v1.31758516","message":"{\"type\":\"points-earned\",\"data\":{\"timestamp\":\"2022-10-03T21:06:17.143166229Z\",\"channel_id\":\"14371185\",\"point_gain\":{\"user_id\":\"31758516\",\"channel_id\":\"14371185\",\"total_points\":12,\"baseline_points\":10,\"reason_code\":\"WATCH\",\"multipliers\":[{\"reason_code\":\"SUB_T1\",\"factor\":0.2}]},\"balance\":{\"user_id\":\"31758516\",\"channel_id\":\"14371185\",\"balance\":4827496}}}"}}
+{"type":"MESSAGE","data":{"topic":"community-points-user-v1.31758516","message":"{\"type\":\"points-earned\",\"data\":{\"timestamp\":\"2022-10-03T21:08:03.338828482Z\",\"channel_id\":\"14371185\",\"point_gain\":{\"user_id\":\"31758516\",\"channel_id\":\"14371185\",\"total_points\":250,\"baseline_points\":250,\"reason_code\":\"RAID\",\"multipliers\":[]},\"balance\":{\"user_id\":\"31758516\",\"channel_id\":\"14371185\",\"balance\":4827746}}}"}}
+

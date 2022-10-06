@@ -138,17 +138,17 @@ def fetch_access_token():
     return requests.post("https://id.twitch.tv/oauth2/token", params=params).json()["access_token"]
 
 
-def make_listen_message(channels, topics):
+def make_listen_message(channels, topics, extra_topics):
     return json.dumps({
       "type": "LISTEN",
       "data": {
-        "topics": [f"{topic}.{channel}" for channel, topic in itertools.product(channels, topics)],
+        "topics": [f"{topic}.{channel}" for channel, topic in itertools.product(channels, topics)] + extra_topics,
         "auth_token": fetch_access_token()
       }
     })
 
 
-async def twitch_websocket_runner(channels, topics, message_handler):
+async def twitch_websocket_runner(channels, topics, message_handler, extra_topics=[]):
     global background_tasks
     async for websocket in websockets.connect("wss://pubsub-edge.twitch.tv/v1"):
         for task in background_tasks:
@@ -156,7 +156,7 @@ async def twitch_websocket_runner(channels, topics, message_handler):
         background_tasks = set()
         try:
             spawn_ping_task(websocket)
-            listen_message = make_listen_message(channels, topics)
+            listen_message = make_listen_message(channels, topics, extra_topics)
             await websocket.send(listen_message)
             while True:
                 message = json.loads(await websocket.recv())
