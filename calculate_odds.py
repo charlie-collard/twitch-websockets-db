@@ -58,7 +58,8 @@ def get_synonyms(event_title):
 def normalize_outcome_title(outcome_title):
     return outcome_title.lower() \
         .replace("of the", "of") \
-        .replace("-", " to ")
+        .replace("-", " to ") \
+        .replace("win this one", "win this run")
 
 
 def calculate_history(channel_id):
