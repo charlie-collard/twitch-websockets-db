@@ -1,4 +1,6 @@
+from ws import NL_ID
 from datetime import datetime, timedelta
+
 import pandas as pd
 import sqlite3
 import csv
@@ -76,7 +78,8 @@ def calculate_history(channel_id):
         out[f"points_{i+1}"] = resolved_bets[f"outcome{i}TotalPoints"]
         out[f"users_{i+1}"] = resolved_bets[f"outcome{i}TotalUsers"]
 
-    out = pd.concat([pd.read_csv("NorthernLion Predictions - predictions.csv"), out])
+    if channel_id == NL_ID:
+        out = pd.concat([pd.read_csv("NorthernLion Predictions - predictions.csv"), out])
     return out
 
 
