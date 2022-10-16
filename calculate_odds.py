@@ -83,7 +83,7 @@ def calculate_history(channel_id):
     return out
 
 
-def history_for_prediction(channel_id, game_name, event_title, outcome_titles, days=60):
+def history_for_prediction(channel_id, game_name, event_title, outcome_titles, days=365):
     history = calculate_history(channel_id)
 
     synonyms = get_synonyms(event_title)
@@ -99,8 +99,8 @@ def history_for_prediction(channel_id, game_name, event_title, outcome_titles, d
     return history
 
 
-def calculate_odds(channel_id, game_name, event_title, outcome_titles):
-    history = history_for_prediction(channel_id, game_name, event_title, outcome_titles)
+def calculate_odds(channel_id, game_name, event_title, outcome_titles, days=365):
+    history = history_for_prediction(channel_id, game_name, event_title, outcome_titles, days)
     odds = history['win_index'].value_counts(normalize=True)
 
     non_null_outcomes = [title for title in outcome_titles if title is not None]
