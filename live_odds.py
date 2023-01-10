@@ -15,7 +15,7 @@ odds = None
 def message_handler(message, topic):
     global odds
     event_data = message["data"]["event"]
-    if event_data["status"] in ['ACTIVE', 'LOCKED']:
+    if event_data["status"] in ['ACTIVE', 'LOCKED', 'CANCELED']:
         if odds is None:
             channel_id = event_data["channel_id"]
             assert channel_id in CHANNELS
@@ -29,7 +29,7 @@ def message_handler(message, topic):
 
         if odds is not None:
             # Try to predict last-second betting + my bet
-            extra = 50000
+            extra = 50000 if event_data["status"] == "ACTIVE" else 0
             points = pd.Series(map(lambda x: int(x['total_points']) + extra, event_data['outcomes']))
             payouts = points.sum() / points
             outcomes = event_data["outcomes"]
@@ -38,7 +38,7 @@ def message_handler(message, topic):
             print(SPACER)
             print((odds * payouts).sort_values().to_string())
 
-        if event_data["status"] == "LOCKED":
+        if event_data["status"] in ["LOCKED", "CANCELED"]:
             odds = None
 
 asyncio.run(twitch_websocket_runner(CHANNELS, TOPICS, message_handler))
