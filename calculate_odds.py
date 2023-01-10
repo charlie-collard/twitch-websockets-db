@@ -14,6 +14,7 @@ KNOWN_SYNONYMS = [
         "How many wins will we get this time?",
         "How many wins will NL get this time?",
         "How many wins will we get on this run?",
+        "How many wins will we get on this one?",
         ]),
     # Games + Demos (Zombs)
     set([

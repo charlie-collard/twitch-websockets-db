@@ -149,6 +149,13 @@ TABLES = [
     """,
 ]
 
+INDEXES = [
+    """
+    create index if not exists idx_prediction_messages_timestamp
+    on prediction_messages (utcTimestamp);
+    """
+]
+
 def to_timestamp(timestamp):
     i = timestamp.find(".")
     j = timestamp.find("Z")
@@ -362,9 +369,16 @@ def create_tables(cursor):
     for create_table in TABLES:
         cursor.execute(create_table)
 
+
+def create_indexes(cursor):
+    for create_index in INDEXES:
+        cursor.execute(create_index)
+
+
 with sqlite3.connect("websockets.db") as connection:
     cursor = connection.cursor()
     create_tables(cursor)
+    create_indexes(cursor)
 
     def message_handler(message, topic):
         if "predictions-channel-v1" in topic:
