@@ -6,10 +6,7 @@ from ws import twitch_websocket_runner, NL_ID, GBP_ID, BAHROO_ID, DAN_ID, DENDI_
 
 CHANNELS = [
     NL_ID,
-    GBP_ID,
-    BAHROO_ID,
     DAN_ID,
-    DENDI_ID,
 ]
 
 TOPICS = [
