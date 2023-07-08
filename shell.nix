@@ -1,8 +1,8 @@
 let
   unstable = import (fetchTarball {
     name = "unstable-2023-01-10";
-    url = "https://github.com/nixos/nixpkgs/archive/35f1f865c03671a4f75a6996000f03ac3dc3e472.tar.gz";
-    sha256 = "sha256:120cip1yn6g5hg35pwd07adr9h0i49g45pay77ix3yfr0nlcx2yh";
+    url = "https://github.com/nixos/nixpkgs/archive/3c7487575d9445185249a159046cc02ff364bff8.tar.gz";
+    sha256 = "sha256:0sll858mrfx64g5hc3sysg5cz4py9nxi8g7m9j5idhh8yq8lcz5p";
   }) { };
 in
 
