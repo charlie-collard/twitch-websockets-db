@@ -8,7 +8,7 @@
   };
 
   outputs = { self, nixpkgs, ... }: {
-    devShells = nixpkgs.lib.genAttrs ["aarch64-darwin"] (system: {
+    devShells = nixpkgs.lib.genAttrs ["aarch64-darwin" "x86_64-linux"] (system: {
       default = nixpkgs.legacyPackages.${system}.mkShell {
         nativeBuildInputs = with nixpkgs.legacyPackages.${system}; [
           (python3.withPackages (pyPkgs: with pyPkgs; [
